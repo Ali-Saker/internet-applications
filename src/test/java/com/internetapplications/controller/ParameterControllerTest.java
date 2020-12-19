@@ -1,7 +1,9 @@
 package com.internetapplications.controller;
 
 import com.internetapplications.InternetApplicationsMasterTestCase;
+import com.internetapplications.entity.Car;
 import com.internetapplications.entity.Parameter;
+import com.internetapplications.mock.MockCar;
 import com.internetapplications.mock.MockParameter;
 import com.internetapplications.mock.MockUser;
 import com.internetapplications.repository.ParameterRepository;
@@ -36,6 +38,18 @@ public class ParameterControllerTest extends InternetApplicationsMasterTestCase 
     @BeforeEach
     public void beforeEach() {
         this.userRepository.save(new MockUser().getInstance());
+    }
+
+    @Test
+    public void create() throws Exception {
+        Parameter parameter = new MockParameter().getInstance();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/params/")
+                .header("Authorization", "Bearer " + jwtService.generateToken(this.userRepository.findAll().get(0)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialize(parameter))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test

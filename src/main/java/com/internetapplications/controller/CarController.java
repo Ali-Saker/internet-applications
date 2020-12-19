@@ -7,6 +7,7 @@ import com.internetapplications.repository.CarRepository;
 import com.internetapplications.repository.ParameterRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ public class CarController {
         this.parameterRepository = parameterRepository;
     }
 
+    @Transactional
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Car car) {
 
@@ -43,6 +45,7 @@ public class CarController {
         return ResponseEntity.ok(this.carRepository.save(car));
     }
 
+    @Transactional
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody Car car) {
         Car origin = this.carRepository.findById(car.getId()).get();
@@ -53,9 +56,13 @@ public class CarController {
         return ResponseEntity.ok("");
     }
 
+    @Transactional
     @RequestMapping(value = "/sell", method = RequestMethod.PUT)
     public ResponseEntity<?> sell(@RequestBody Car car) {
         Car origin = this.carRepository.findById(car.getId()).get();
+        if(origin.isSold()) {
+            throw new RuntimeException("This car is already sold, please refresh the page.");
+        }
         origin.setRetailPrice(car.getRetailPrice());
         origin.setBuyerName(car.getBuyerName());
         origin.setSold(true);

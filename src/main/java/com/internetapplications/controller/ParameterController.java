@@ -5,6 +5,7 @@ import com.internetapplications.repository.ParameterRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,12 +18,14 @@ public class ParameterController {
         this.parameterRepository = parameterRepository;
     }
 
+    @Transactional
     @CacheEvict(value = "internet-applications-cache", key = "'params'")
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Parameter parameter) {
         return ResponseEntity.ok(this.parameterRepository.save(parameter));
     }
 
+    @Transactional
     @CacheEvict(value = "internet-applications-cache", key = "'params'")
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody Parameter parameter) {
@@ -32,6 +35,7 @@ public class ParameterController {
         return ResponseEntity.ok("");
     }
 
+    @Transactional
 //    @Cacheable(value = "internet-applications-cache", key = "'params'")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<?> list() {

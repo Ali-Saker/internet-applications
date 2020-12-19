@@ -2,9 +2,11 @@ package com.internetapplications.controller;
 
 import com.internetapplications.InternetApplicationsMasterTestCase;
 import com.internetapplications.entity.Car;
+import com.internetapplications.entity.Parameter;
 import com.internetapplications.mock.MockCar;
 import com.internetapplications.mock.MockUser;
 import com.internetapplications.repository.CarRepository;
+import com.internetapplications.repository.ParameterRepository;
 import com.internetapplications.repository.UserRepository;
 import com.internetapplications.security.JwtService;
 import org.hamcrest.Matchers;
@@ -30,11 +32,33 @@ public class CarControllerTest extends InternetApplicationsMasterTestCase {
     private UserRepository userRepository;
 
     @Autowired
+    private ParameterRepository parameterRepository;
+
+    @Autowired
     private JwtService jwtService;
 
     @BeforeEach
     public void beforeEach() {
         this.userRepository.save(new MockUser().getInstance());
+    }
+
+    @Test
+    public void create() throws Exception {
+        Car car = new MockCar().getInstance();
+
+        Parameter parameter = new Parameter();
+        parameter.setName("Profit Rate");
+        parameter.setValue("50");
+        this.parameterRepository.save(parameter);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/cars/")
+                .header("Authorization", "Bearer " + jwtService.generateToken(this.userRepository.findAll().get(0)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialize(car))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
     }
 
     @Test
@@ -90,5 +114,6 @@ public class CarControllerTest extends InternetApplicationsMasterTestCase {
     public void afterEach() {
         this.carRepository.deleteAll();
         this.userRepository.deleteAll();
+        this.parameterRepository.deleteAll();
     }
 }
