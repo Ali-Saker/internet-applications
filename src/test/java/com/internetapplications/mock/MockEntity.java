@@ -1,7 +1,9 @@
 package com.internetapplications.mock;
 
 import com.github.javafaker.Faker;
+import com.internetapplications.entity.BaseEntity;
 
-public abstract class MockEntity {
-    public static final Faker faker = new Faker();
+public interface MockEntity<T extends BaseEntity> {
+    Faker faker = new Faker();
+    T getInstance();
 }

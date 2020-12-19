@@ -3,6 +3,7 @@ package com.internetapplications.entity;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Car extends BaseEntity{
@@ -19,6 +20,7 @@ public class Car extends BaseEntity{
     private boolean sold = false;
     private String buyerName;
     private Double retailPrice;
+    private Date sellDate;
 
     public String getName() {
         return name;
@@ -61,10 +63,6 @@ public class Car extends BaseEntity{
     }
 
     public Double getRetailPrice() {
-        Parameter profitRateParam = this.parameterRepository.findTopByName(defaultSeatsNumberParamName);
-        int defaultSeatsNumber = Integer.parseInt(defaultSeatsNumberParam.getValue());
-
-        retailPrice = this.price * (.1);
         return retailPrice;
     }
 
@@ -72,4 +70,11 @@ public class Car extends BaseEntity{
         this.retailPrice = retailPrice;
     }
 
+    public Date getSellDate() {
+        return sellDate;
+    }
+
+    public void setSellDate(Date sellDate) {
+        this.sellDate = sellDate;
+    }
 }

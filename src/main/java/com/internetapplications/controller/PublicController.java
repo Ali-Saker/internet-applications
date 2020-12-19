@@ -1,8 +1,12 @@
 package com.internetapplications.controller;
 
 import com.internetapplications.entity.User;
+import com.internetapplications.mail.EmailRecipient;
+import com.internetapplications.mail.MailService;
+import com.internetapplications.mail.TextEmail;
 import com.internetapplications.repository.UserRepository;
 import com.internetapplications.security.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +25,7 @@ public class PublicController {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+
 
     public PublicController(JwtService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;

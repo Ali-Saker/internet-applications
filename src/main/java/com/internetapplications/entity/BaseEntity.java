@@ -2,6 +2,7 @@ package com.internetapplications.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,6 +41,10 @@ public class BaseEntity implements Serializable {
     )
     private String uuid;
 
+    @Version
+    @ColumnDefault("0")
+    private long version;
+
     public Long getId() {
         return id;
     }
@@ -54,6 +59,15 @@ public class BaseEntity implements Serializable {
 
     public Date getLastModifiedDate() {
         return lastModifiedDate;
+    }
+
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @PrePersist

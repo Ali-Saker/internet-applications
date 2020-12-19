@@ -1,5 +1,6 @@
 package com.internetapplications.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
